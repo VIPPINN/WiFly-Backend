@@ -8,6 +8,7 @@ import com.technored.wifly.dto.auth.ResetPasswordRequest;
 import com.technored.wifly.entity.User;
 import com.technored.wifly.repository.UserRepository;
 import com.technored.wifly.security.JwtUtils;
+import com.technored.wifly.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +44,7 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
 
         return AuthResponse.builder()
                 .token(jwt)
@@ -103,7 +104,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Error: Email not found!"));
 
         String resetToken = UUID.randomUUID().toString();
-        user.setResetPasswordToken(resetToken);
+        user.setPasswordResetToken(resetToken);
         userRepository.save(user);
 
         // Send email with reset token
@@ -111,11 +112,11 @@ public class AuthService {
     }
 
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByResetPasswordToken(resetPasswordRequest.getToken())
+        User user = userRepository.findByPasswordResetToken(resetPasswordRequest.getToken())
                 .orElseThrow(() -> new RuntimeException("Error: Invalid or expired reset token!"));
 
         user.setPassword(encoder.encode(resetPasswordRequest.getPassword()));
-        user.setResetPasswordToken(null);
+        user.setPasswordResetToken(null);
         userRepository.save(user);
     }
 }

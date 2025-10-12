@@ -15,14 +15,21 @@ public class UserPrincipal implements UserDetails {
     private String username;
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private Boolean emailVerified;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(Long id, String username, String email, String password, 
+                        String firstName, String lastName, Boolean emailVerified,
                         Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.emailVerified = emailVerified;
         this.authorities = authorities;
     }
 
@@ -36,6 +43,9 @@ public class UserPrincipal implements UserDetails {
             user.getUsername(),
             user.getEmail(),
             user.getPassword(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmailVerified(),
             authorities
         );
     }
@@ -46,6 +56,18 @@ public class UserPrincipal implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
     }
 
     @Override

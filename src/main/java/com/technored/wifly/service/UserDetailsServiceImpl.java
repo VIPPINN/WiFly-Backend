@@ -2,6 +2,7 @@ package com.technored.wifly.service;
 
 import com.technored.wifly.entity.User;
 import com.technored.wifly.repository.UserRepository;
+import com.technored.wifly.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
